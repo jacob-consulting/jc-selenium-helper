@@ -1,0 +1,8 @@
+nav:
+  - index.md
+  - browser.md
+  - colors.md
+  - pytest_plugin.md
+  - config.md
+  - axe.md
+  - migration.md

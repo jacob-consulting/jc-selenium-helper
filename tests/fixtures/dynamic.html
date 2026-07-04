@@ -1,0 +1,23 @@
+<!-- tests/fixtures/dynamic.html -->
+<!doctype html>
+<html>
+  <head><title>dynamic</title></head>
+  <body>
+    <div id="vanishing">now you see me</div>
+    <div id="hover-target">hover me</div>
+    <div id="hover-result"></div>
+    <input id="upload" type="file" />
+    <script>
+      // #vanishing disappears shortly after load
+      setTimeout(function () {
+        document.getElementById("vanishing").style.display = "none";
+      }, 300);
+      // record the first hover onto #hover-target
+      document
+        .getElementById("hover-target")
+        .addEventListener("mouseover", function () {
+          document.getElementById("hover-result").textContent = "hovered";
+        });
+    </script>
+  </body>
+</html>

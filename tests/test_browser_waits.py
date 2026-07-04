@@ -27,3 +27,14 @@ def test_wait_document_ready(browser, fixture_url):
 def test_wait_page_loaded_on_present_element(browser, fixture_url):
     browser.open(fixture_url("basic.html"))
     browser.wait_page_loaded("//h1[@id='title']", retries=1, interval=1)
+
+
+def test_wait_not_present_returns_true_when_element_disappears(browser, fixture_url):
+    browser.open(fixture_url("dynamic.html"))
+    assert browser.wait_not_present("//div[@id='vanishing']") is True
+
+
+def test_wait_not_present_times_out_when_element_stays(browser, fixture_url):
+    browser.open(fixture_url("basic.html"))
+    with pytest.raises(TimeoutException, match="still present"):
+        browser.wait_not_present("//h1[@id='title']", timeout=1)

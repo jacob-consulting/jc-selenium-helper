@@ -16,25 +16,11 @@ pip install "jc-selenium-helper[axe]"     # + accessibility checks
 pip install "jc-selenium-helper[all]"     # everything
 ```
 
-## Quickstart
+## Where to go next
 
-```python
-from selenium import webdriver
-from jc_selenium_helper import Browser
+- [Getting Started](getting_started/index.md) for a quickstart.
+- [Reference](reference/index.md) for the full API.
+- [Development](development/index.md) to contribute.
 
-driver = webdriver.Chrome()
-browser = Browser(driver, default_timeout=30)
-
-browser.open("https://example.com")
-browser.wait_and_click("//a[@id='more']")  # XPath by default
-```
-
-## Links
-
-- Full documentation: https://jc-selenium-helper.readthedocs.io
-- PyPI: https://pypi.org/project/jc-selenium-helper/
-- Source: https://github.com/jacob-consulting/jc-selenium-helper
-
-## License
-
-MIT — see [LICENSE](LICENSE).
+Migrating an existing suite from the old German-named `libs.browser.Browser`?
+See [Migration](reference/migration.md).

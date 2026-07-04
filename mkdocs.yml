@@ -1,0 +1,7 @@
+site_name: jc-selenium-helper
+theme: readthedocs
+plugins:
+  - search
+  - awesome-pages
+repo_url: https://github.com/jacob-consulting/jc-selenium-helper
+edit_uri: blob/main/docs/

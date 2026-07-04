@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.0
+
+### Changed
+
+- **Insecure Chrome flags are now opt-in.** The `jc_chrome_options` fixture no
+  longer adds `--no-sandbox` or `--ignore-certificate-errors` by default (they
+  disable the browser sandbox and TLS verification). Opt in by setting the
+  `JC_SELENIUM_INSECURE` environment variable or overriding the new
+  `jc_insecure_chrome` fixture to return `True`; enabling them emits an
+  `InsecureChromeOptionsWarning`.
+
 ## 0.1.0
 
 Initial release.

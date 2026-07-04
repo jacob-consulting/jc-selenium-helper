@@ -12,7 +12,7 @@ browser = Browser(driver, default_timeout=120, poll_pause=1)
 - `default_timeout` (`float`, default `120`) — seconds used by wait methods when
   no explicit `timeout` is given.
 - `poll_pause` (`float`, default `1`) — seconds slept between polling attempts
-  (`wait_document_ready`, `double_click`, `move_to`, `wait_move_click`).
+  (`wait_document_ready`, `move_to`, `wait_move_click`).
 
 ## Navigation
 

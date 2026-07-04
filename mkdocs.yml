@@ -5,3 +5,5 @@ plugins:
   - awesome-pages
 repo_url: https://github.com/jacob-consulting/jc-selenium-helper
 edit_uri: blob/main/docs/
+exclude_docs: |
+  superpowers/

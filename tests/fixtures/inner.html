@@ -2,5 +2,17 @@
 <!doctype html>
 <html>
   <head><title>inner</title></head>
-  <body><input id="inner-input" type="text" /></body>
+  <body>
+    <input id="inner-input" type="text" />
+    <div id="submitted"></div>
+    <script>
+      document
+        .getElementById("inner-input")
+        .addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            document.getElementById("submitted").textContent = e.target.value;
+          }
+        });
+    </script>
+  </body>
 </html>

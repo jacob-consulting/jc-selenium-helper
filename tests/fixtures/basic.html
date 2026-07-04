@@ -10,5 +10,12 @@
       <li class="item">c</li>
     </ul>
     <button id="btn">Click</button>
+    <div id="delayed"></div>
+    <script>
+      setTimeout(function () {
+        document.getElementById("delayed").innerHTML =
+          '<span id="late">here</span>';
+      }, 500);
+    </script>
   </body>
 </html>

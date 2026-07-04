@@ -48,10 +48,14 @@
 - Create: `pyproject.toml`
 - Create: `src/jc_selenium_helper/__init__.py`
 - Create: `src/jc_selenium_helper/py.typed`
+- Create: `src/jc_selenium_helper/plugin.py` (stub — filled in at Task 8)
+- Create: `README.md` (minimal stub — expanded at Task 11)
 - Create: `tests/test_package.py`
 
 **Interfaces:**
 - Produces: importable package `jc_selenium_helper` exposing `__version__: str` and (added in Task 3) `Browser`.
+
+**Why the plugin stub:** `pyproject.toml` declares a `pytest11` entry point pointing at `jc_selenium_helper.plugin`. pytest imports every registered `pytest11` plugin at startup — regardless of which extras are installed — so if `plugin.py` is absent, *every* `pytest` run (Tasks 3–7 included) crashes with `ModuleNotFoundError: No module named 'jc_selenium_helper.plugin'`. A stub module that imports cleanly (no fixtures yet) is a valid no-op pytest plugin and keeps the suite runnable from Task 1 on.
 
 - [ ] **Step 1: Write `pyproject.toml`**
 
@@ -142,6 +146,29 @@ __all__ = ["__version__"]
 
 Create empty file `src/jc_selenium_helper/py.typed` (0 bytes).
 
+- [ ] **Step 3a: Write the stub pytest plugin**
+
+```python
+# src/jc_selenium_helper/plugin.py
+"""pytest plugin for jc-selenium-helper.
+
+Registered via the ``pytest11`` entry point. Fixtures are added in a later
+task; this stub exists so pytest can import the plugin from Task 1 onward.
+"""
+```
+
+- [ ] **Step 3b: Write a minimal README**
+
+```markdown
+# jc-selenium-helper
+
+Selenium WebDriver helper utilities for writing browser tests.
+
+Full documentation: https://jc-selenium-helper.readthedocs.io
+```
+
+(Task 11 replaces this with the full README.)
+
 - [ ] **Step 4: Write the smoke test**
 
 ```python
@@ -166,7 +193,7 @@ Expected: PASS (1 passed).
 - [ ] **Step 6: Commit**
 
 ```bash
-git add pyproject.toml src/jc_selenium_helper/__init__.py src/jc_selenium_helper/py.typed tests/test_package.py
+git add pyproject.toml README.md src/jc_selenium_helper/__init__.py src/jc_selenium_helper/py.typed src/jc_selenium_helper/plugin.py tests/test_package.py
 git commit -m "chore: scaffold jc-selenium-helper package"
 ```
 
@@ -361,22 +388,17 @@ Expected: FAIL (ModuleNotFoundError: jc_selenium_helper.browser).
 
 - [ ] **Step 5: Write the `Browser` skeleton + finders**
 
+Import only what the finders use; later tasks (4–6) add their own imports to the top of this file as they introduce methods. This keeps every commit free of unused imports (the project's ruff config flags F401).
+
 ```python
 # src/jc_selenium_helper/browser.py
 """A thin, ergonomic wrapper around a Selenium WebDriver."""
 
 from __future__ import annotations
 
-import time
-
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.select import Select
-from selenium.webdriver.support.wait import WebDriverWait
 
 
 class Browser:
@@ -510,7 +532,17 @@ Expected: FAIL (AttributeError: 'Browser' object has no attribute 'wait_present'
 
 - [ ] **Step 4: Add the wait methods to `Browser`**
 
-Insert after the finders block in `src/jc_selenium_helper/browser.py`:
+First add the imports these methods need to the top of `src/jc_selenium_helper/browser.py` (keep imports sorted; ruff `I` will enforce order):
+
+```python
+import time
+
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+```
+
+Then insert after the finders block in `src/jc_selenium_helper/browser.py`:
 
 ```python
     # -- waits --
@@ -675,7 +707,14 @@ Expected: FAIL (AttributeError: no attribute 'type_text').
 
 - [ ] **Step 5: Add the action methods to `Browser`**
 
-Insert after the waits block in `src/jc_selenium_helper/browser.py`:
+First add the imports these methods need to the top of `src/jc_selenium_helper/browser.py` (keep imports sorted):
+
+```python
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+```
+
+(`time` is already imported from Task 4.) Then insert after the waits block in `src/jc_selenium_helper/browser.py`:
 
 ```python
     # -- actions --
@@ -861,7 +900,13 @@ Expected: FAIL (AttributeError: no attribute 'assert_checkbox_checked').
 
 - [ ] **Step 5: Add the assertion + frame methods to `Browser`**
 
-Insert after the actions block in `src/jc_selenium_helper/browser.py`:
+First add the import these methods need to the top of `src/jc_selenium_helper/browser.py` (keep imports sorted):
+
+```python
+from selenium.webdriver.support.select import Select
+```
+
+(`Keys` is already imported from Task 5.) Then insert after the actions block in `src/jc_selenium_helper/browser.py`:
 
 ```python
     # -- assertions --
@@ -1146,11 +1191,11 @@ git commit -m "feat: add legacy compatibility adapter"
 ### Task 8: pytest plugin
 
 **Files:**
-- Create: `src/jc_selenium_helper/plugin.py`
+- Modify: `src/jc_selenium_helper/plugin.py` (replace the Task 1 stub with real fixtures)
 - Test: `tests/test_plugin.py`
 
 **Interfaces:**
-- Consumes: `Browser` from Task 3. Registered via the `pytest11` entry point already declared in `pyproject.toml` (Task 1).
+- Consumes: `Browser` from Task 3. Registered via the `pytest11` entry point already declared in `pyproject.toml` (Task 1). The Task 1 stub `plugin.py` is replaced by the module below.
 - Produces pytest fixtures:
   - `jc_chrome_options() -> selenium...chrome.options.Options` — sensible, overridable defaults.
   - `jc_browser(selenium) -> Browser` — wraps the `pytest-selenium` `selenium` driver fixture.

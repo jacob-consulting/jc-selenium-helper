@@ -24,14 +24,16 @@ def test_double_click(browser, fixture_url):
     assert browser.find("//button[@id='dbl']").text == "double"
 
 
-def test_hover_does_not_raise(browser, fixture_url):
-    browser.open(fixture_url("basic.html"))
-    browser.hover("//button[@id='clickable']")
+def test_hover_triggers_mouseover(browser, fixture_url):
+    browser.open(fixture_url("dynamic.html"))
+    browser.hover("//div[@id='hover-target']")
+    assert browser.find("//div[@id='hover-result']").text == "hovered"
 
 
-def test_move_to_does_not_raise(browser, fixture_url):
-    browser.open(fixture_url("basic.html"))
-    browser.move_to("//button[@id='clickable']")
+def test_move_to_triggers_mouseover(browser, fixture_url):
+    browser.open(fixture_url("dynamic.html"))
+    browser.move_to("//div[@id='hover-target']")
+    assert browser.find("//div[@id='hover-result']").text == "hovered"
 
 
 def test_click_in_new_tab_returns_to_main(browser, fixture_url):

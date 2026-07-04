@@ -11,6 +11,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 
@@ -153,3 +154,45 @@ class Browser:
         self.wait_present(check_path, check_by)
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
+
+    # -- assertions --
+    def assert_checkbox_checked(self, locator: str, by: str = By.XPATH, timeout: float | None = None) -> None:
+        if not self.wait_present(locator, by, timeout).is_selected():
+            raise AssertionError(f"Checkbox is not checked: {locator}")
+
+    def assert_checkbox_unchecked(self, locator: str, by: str = By.XPATH, timeout: float | None = None) -> None:
+        if self.wait_present(locator, by, timeout).is_selected():
+            raise AssertionError(f"Checkbox is checked: {locator}")
+
+    def assert_selected_option(self, locator: str, expected_text: str, by: str = By.XPATH) -> None:
+        select = Select(self.find(locator, by))
+        actual = select.first_selected_option.text
+        if actual != expected_text:
+            raise AssertionError(f"Selected option '{actual}' != expected '{expected_text}'")
+
+    def assert_present(self, locator: str, by: str = By.XPATH) -> None:
+        if not self.exists(locator, by):
+            raise AssertionError(f"Element not present: {locator}")
+
+    # -- frames --
+    def fill_in_frame(
+        self,
+        frame_path: str,
+        inner_path: str,
+        text: str,
+        by: str = By.XPATH,
+        submit: bool = True,
+    ) -> None:
+        """Switch into ``frame_path``, type ``text`` into ``inner_path``, switch back.
+
+        Generic replacement for the app-specific ``switch_and_fill_frame`` (which
+        hardcoded the TinyMCE inner path).
+        """
+        frame = self.find(frame_path, by)
+        self.driver.switch_to.frame(frame)
+        try:
+            self.type_text(inner_path, text)
+            if submit:
+                self.type_text(inner_path, Keys.RETURN)
+        finally:
+            self.driver.switch_to.default_content()

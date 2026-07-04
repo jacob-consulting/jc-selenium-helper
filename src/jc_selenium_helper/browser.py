@@ -6,7 +6,9 @@ from __future__ import annotations
 import time
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -99,3 +101,55 @@ class Browser:
             if attempt > retries:
                 raise TimeoutError(f"Page not loaded (missing {check_path})")
         self.wait_document_ready()
+
+    # -- actions --
+    def wait_and_click(self, locator: str, by: str = By.XPATH, timeout: float | None = None) -> None:
+        self.wait_clickable(locator, by, timeout).click()
+
+    def double_click(self, locator: str, by: str = By.XPATH, pause: float = 0) -> None:
+        element = self.find(locator, by)
+        ActionChains(self.driver).move_to_element(element).double_click().perform()
+        if pause:
+            time.sleep(pause)
+
+    def hover(self, locator: str, by: str = By.XPATH) -> None:
+        element = self.find(locator, by)
+        ActionChains(self.driver).move_to_element(element).perform()
+
+    def hover_with_offset(self, locator: str, x_offset: int, y_offset: int, by: str = By.XPATH) -> None:
+        element = self.find(locator, by)
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        actions.move_by_offset(x_offset, y_offset).perform()
+
+    def move_to(self, locator: str, by: str = By.XPATH) -> None:
+        element = self.find(locator, by)
+        ActionChains(self.driver).move_to_element(element).perform()
+        time.sleep(self.poll_pause)
+
+    def wait_move_click(self, locator: str, by: str = By.XPATH, timeout: float | None = None) -> None:
+        element = self.wait_clickable(locator, by, timeout)
+        ActionChains(self.driver).move_to_element(element).perform()
+        time.sleep(self.poll_pause)
+        element.click()
+
+    def type_text(self, locator: str, text: str, by: str = By.XPATH) -> None:
+        self.find(locator, by).send_keys(text)
+
+    def upload_file(self, css_selector: str, path: str) -> None:
+        self.driver.find_element(By.CSS_SELECTOR, css_selector).send_keys(path)
+
+    def click_in_new_tab(
+        self,
+        locator: str,
+        check_path: str,
+        by: str = By.XPATH,
+        check_by: str = By.XPATH,
+    ) -> None:
+        """Ctrl-click a link, verify the new tab, close it, return to the first tab."""
+        element = self.find(locator, by)
+        ActionChains(self.driver).key_down(Keys.CONTROL).click(element).key_up(Keys.CONTROL).perform()
+        self.driver.switch_to.window(self.driver.window_handles[-1])
+        self.wait_present(check_path, check_by)
+        self.driver.close()
+        self.driver.switch_to.window(self.driver.window_handles[0])

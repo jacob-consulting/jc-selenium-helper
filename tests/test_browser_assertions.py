@@ -18,6 +18,12 @@ def test_assert_checkbox_unchecked_passes(browser, fixture_url):
     browser.assert_checkbox_unchecked("//input[@id='unchecked-box']")
 
 
+def test_assert_checkbox_unchecked_fails(browser, fixture_url):
+    browser.open(fixture_url("basic.html"))
+    with pytest.raises(AssertionError):
+        browser.assert_checkbox_unchecked("//input[@id='checked-box']")
+
+
 def test_assert_selected_option_passes(browser, fixture_url):
     browser.open(fixture_url("basic.html"))
     browser.assert_selected_option("//select[@id='picker']", "two")

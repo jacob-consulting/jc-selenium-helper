@@ -7,7 +7,7 @@ automatically — no explicit `pytest_plugins` entry needed. It depends on
 WebDriver management.
 
 Fixtures are namespaced with a `jc_` prefix so they don't clash with a
-project's own `browser`/`chrome_options` fixtures.
+project's own fixtures.
 
 ## `jc_chrome_options`
 
@@ -28,6 +28,25 @@ def jc_chrome_options(jc_chrome_options):
     jc_chrome_options.add_argument("--window-size=1920,1080")
     return jc_chrome_options
 ```
+
+### Feeding these into pytest-selenium
+
+pytest-selenium builds its Chrome driver from a fixture named `chrome_options`.
+To make it use `jc_chrome_options`, add a one-line override to your project's
+`conftest.py`:
+
+```python
+import pytest
+
+@pytest.fixture
+def chrome_options(jc_chrome_options):
+    return jc_chrome_options
+```
+
+A `conftest.py` fixture deterministically takes precedence over
+pytest-selenium's own `chrome_options`. (Earlier versions shipped this
+override as a plugin fixture, but plugin-vs-plugin fixture precedence is not
+guaranteed across environments, so the wiring is now an explicit one-liner.)
 
 ### Insecure flags are opt-in
 

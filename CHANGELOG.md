@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- **Removed the plugin-level `chrome_options` fixture.** It was meant to feed
+  `jc_chrome_options` into pytest-selenium's driver automatically, but
+  plugin-vs-plugin fixture precedence is not deterministic across environments,
+  so the wiring was unreliable (it worked in some installs and silently used
+  pytest-selenium's own defaults in others). To feed the defaults in, add a
+  one-line `chrome_options` override to your project `conftest.py` (a conftest
+  fixture reliably takes precedence):
+
+  ```python
+  @pytest.fixture
+  def chrome_options(jc_chrome_options):
+      return jc_chrome_options
+  ```
+
 ## 0.2.0
 
 ### Changed

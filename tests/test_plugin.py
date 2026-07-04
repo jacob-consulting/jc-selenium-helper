@@ -66,35 +66,48 @@ def test_env_var_falsey_stays_safe(pytester, monkeypatch):
     result.assert_outcomes(passed=1, warnings=0)
 
 
-def test_chrome_options_feeds_pytest_selenium(pytester):
+def test_conftest_override_feeds_jc_options_into_chrome_options(pytester):
+    # The documented wiring: a one-line chrome_options override in the project
+    # conftest deterministically takes precedence over pytest-selenium's own
+    # chrome_options, so jc defaults flow into the driver.
+    pytester.makeconftest(
+        """
+        import pytest
+
+
+        @pytest.fixture
+        def chrome_options(jc_chrome_options):
+            return jc_chrome_options
+        """
+    )
     pytester.makepyfile(
         """
-        def test_same_object(chrome_options, jc_chrome_options):
+        def test_jc_defaults_present(chrome_options, jc_chrome_options):
             assert chrome_options is jc_chrome_options
+            assert "--headless=new" in chrome_options.arguments
         """
     )
     result = pytester.runpytest()
     result.assert_outcomes(passed=1)
 
 
-def test_chrome_options_reflects_jc_chrome_options_override(pytester):
+def test_conftest_override_can_customize_jc_options(pytester):
     pytester.makeconftest(
         """
         import pytest
-        from selenium.webdriver.chrome.options import Options
 
 
         @pytest.fixture
-        def jc_chrome_options():
-            options = Options()
-            options.add_argument("--window-size=1920,1080")
-            return options
+        def chrome_options(jc_chrome_options):
+            jc_chrome_options.add_argument("--window-size=1920,1080")
+            return jc_chrome_options
         """
     )
     pytester.makepyfile(
         """
-        def test_override_flows_through(chrome_options):
+        def test_customization_flows_through(chrome_options):
             assert "--window-size=1920,1080" in chrome_options.arguments
+            assert "--headless=new" in chrome_options.arguments
         """
     )
     result = pytester.runpytest()

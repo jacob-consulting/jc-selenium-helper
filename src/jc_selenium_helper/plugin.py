@@ -47,6 +47,14 @@ def jc_insecure_chrome() -> bool:
 def jc_chrome_options(jc_insecure_chrome):
     """Sensible default headless Chrome options; override in a project conftest to customize.
 
+    To feed these into pytest-selenium's driver, add a one-line ``chrome_options``
+    override to your project ``conftest.py`` (conftest fixtures deterministically
+    take precedence over pytest-selenium's own ``chrome_options``)::
+
+        @pytest.fixture
+        def chrome_options(jc_chrome_options):
+            return jc_chrome_options
+
     The security-weakening flags in :data:`INSECURE_CHROME_ARGS` are **off by
     default**. Enable them (e.g. for sandboxed CI containers) by overriding the
     ``jc_insecure_chrome`` fixture to return ``True`` or by setting the
@@ -73,17 +81,6 @@ def jc_chrome_options(jc_insecure_chrome):
             options.add_argument(arg)
 
     return options
-
-
-@pytest.fixture
-def chrome_options(jc_chrome_options):
-    """Feed jc_chrome_options into pytest-selenium's driver.
-
-    pytest-selenium builds its Chrome driver from a fixture named
-    ``chrome_options``; delegating here makes the package's defaults apply while
-    letting users customize by overriding ``jc_chrome_options``.
-    """
-    return jc_chrome_options
 
 
 @pytest.fixture

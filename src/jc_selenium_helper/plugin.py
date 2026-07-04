@@ -27,6 +27,17 @@ def jc_chrome_options():
 
 
 @pytest.fixture
+def chrome_options(jc_chrome_options):
+    """Feed jc_chrome_options into pytest-selenium's driver.
+
+    pytest-selenium builds its Chrome driver from a fixture named
+    ``chrome_options``; delegating here makes the package's defaults apply while
+    letting users customize by overriding ``jc_chrome_options``.
+    """
+    return jc_chrome_options
+
+
+@pytest.fixture
 def jc_browser(selenium) -> Browser:
     """Wrap the pytest-selenium ``selenium`` driver in a :class:`Browser`."""
     return Browser(selenium)

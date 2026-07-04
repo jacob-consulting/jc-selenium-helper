@@ -38,3 +38,9 @@ def test_wait_not_present_times_out_when_element_stays(browser, fixture_url):
     browser.open(fixture_url("basic.html"))
     with pytest.raises(TimeoutException, match="still present"):
         browser.wait_not_present("//h1[@id='title']", timeout=1)
+
+
+def test_wait_page_loaded_times_out_after_retries(browser, fixture_url):
+    browser.open(fixture_url("basic.html"))
+    with pytest.raises(TimeoutError, match="Page not loaded"):
+        browser.wait_page_loaded("//div[@id='never-there']", retries=1, interval=0.1)

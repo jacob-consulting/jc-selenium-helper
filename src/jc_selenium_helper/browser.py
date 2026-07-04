@@ -50,27 +50,19 @@ class Browser:
         return self.default_timeout if timeout is None else timeout
 
     def wait_present(self, locator: str, by: str = By.XPATH, timeout: float | None = None) -> WebElement:
-        WebDriverWait(self.driver, self._timeout(timeout)).until(
-            EC.presence_of_element_located((by, locator))
-        )
+        WebDriverWait(self.driver, self._timeout(timeout)).until(EC.presence_of_element_located((by, locator)))
         return self.driver.find_element(by, locator)
 
     def wait_clickable(self, locator: str, by: str = By.XPATH, timeout: float | None = None) -> WebElement:
-        WebDriverWait(self.driver, self._timeout(timeout)).until(
-            EC.element_to_be_clickable((by, locator))
-        )
+        WebDriverWait(self.driver, self._timeout(timeout)).until(EC.element_to_be_clickable((by, locator)))
         return self.driver.find_element(by, locator)
 
     def wait_not_present(self, locator: str, by: str = By.XPATH, timeout: float | None = None) -> bool:
         seconds = self._timeout(timeout)
         try:
-            WebDriverWait(self.driver, seconds).until(
-                EC.invisibility_of_element_located((by, locator))
-            )
+            WebDriverWait(self.driver, seconds).until(EC.invisibility_of_element_located((by, locator)))
         except TimeoutException as exc:
-            raise TimeoutException(
-                f"Element '{locator}' still present after {seconds}s"
-            ) from exc
+            raise TimeoutException(f"Element '{locator}' still present after {seconds}s") from exc
         return True
 
     def wait_document_ready(self, timeout: float | None = None) -> None:

@@ -18,6 +18,20 @@
         .addEventListener("mouseover", function () {
           document.getElementById("hover-result").textContent = "hovered";
         });
+      // append late elements to exercise the assertion waits (M3.1)
+      setTimeout(function () {
+        var late = document.createElement("div");
+        late.id = "late-element";
+        late.textContent = "late";
+        document.body.appendChild(late);
+
+        var select = document.createElement("select");
+        select.id = "late-select";
+        select.innerHTML =
+          '<option value="one">one</option>' +
+          '<option value="two" selected>two</option>';
+        document.body.appendChild(select);
+      }, 300);
     </script>
   </body>
 </html>

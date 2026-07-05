@@ -38,4 +38,16 @@ def test_assert_selected_option_fails(browser, fixture_url):
 def test_assert_present_fails_when_missing(browser, fixture_url):
     browser.open(fixture_url("basic.html"))
     with pytest.raises(AssertionError):
-        browser.assert_present("//div[@id='nope']")
+        browser.assert_present("//div[@id='nope']", timeout=0.5)
+
+
+def test_assert_present_waits_for_late_element(browser, fixture_url):
+    browser.open(fixture_url("dynamic.html"))
+    # #late-element is appended ~300ms after load; the assertion must wait.
+    browser.assert_present("//div[@id='late-element']")
+
+
+def test_assert_selected_option_waits_for_late_select(browser, fixture_url):
+    browser.open(fixture_url("dynamic.html"))
+    # #late-select is appended ~300ms after load; the assertion must wait.
+    browser.assert_selected_option("//select[@id='late-select']", "two")

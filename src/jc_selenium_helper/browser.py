@@ -154,15 +154,19 @@ class Browser:
         if self.wait_present(locator, by, timeout).is_selected():
             raise AssertionError(f"Checkbox is checked: {locator}")
 
-    def assert_selected_option(self, locator: str, expected_text: str, by: str = By.XPATH) -> None:
-        select = Select(self.find(locator, by))
+    def assert_selected_option(
+        self, locator: str, expected_text: str, by: str = By.XPATH, timeout: float | None = None
+    ) -> None:
+        select = Select(self.wait_present(locator, by, timeout))
         actual = select.first_selected_option.text
         if actual != expected_text:
             raise AssertionError(f"Selected option '{actual}' != expected '{expected_text}'")
 
-    def assert_present(self, locator: str, by: str = By.XPATH) -> None:
-        if not self.exists(locator, by):
-            raise AssertionError(f"Element not present: {locator}")
+    def assert_present(self, locator: str, by: str = By.XPATH, timeout: float | None = None) -> None:
+        try:
+            self.wait_present(locator, by, timeout)
+        except TimeoutException:
+            raise AssertionError(f"Element not present: {locator}") from None
 
     # -- frames --
     def fill_in_frame(

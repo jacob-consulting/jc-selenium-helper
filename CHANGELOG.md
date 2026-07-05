@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.1
+
+### Internal
+
+- Test backfill for `Browser` failure paths and previously untested methods
+  (`wait_not_present`, `wait_page_loaded` retry timeout, `wait_move_click`,
+  `upload_file`, `assert_checkbox_unchecked`, `fill_in_frame(submit=True)`),
+  and upgraded the `hover`/`move_to` tests to assert real `mouseover`
+  behavior. Raises `browser.py` coverage from 46% to ~92%. No API or behavior
+  changes.
+
 ## 0.3.0
 
 ### Changed

@@ -1,3 +1,5 @@
+import re
+
 import pytest
 
 from jc_selenium_helper.colors import rgb_to_hex
@@ -14,3 +16,16 @@ from jc_selenium_helper.colors import rgb_to_hex
 )
 def test_rgb_to_hex(value, expected):
     assert rgb_to_hex(value) == expected
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        "not a color",  # no parentheses
+        "rgb(1, 2)",  # too few components
+        "rgb(a, b, c)",  # non-numeric components
+    ],
+)
+def test_rgb_to_hex_rejects_malformed(value):
+    with pytest.raises(ValueError, match=re.escape(value)):
+        rgb_to_hex(value)

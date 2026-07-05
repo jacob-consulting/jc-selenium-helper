@@ -1,6 +1,6 @@
 [project]
 name = "jc-selenium-helper"
-version = "0.3.0"
+version = "0.3.1"
 description = "Selenium WebDriver helper utilities for writing browser tests"
 authors = [{ name = "Alexander Jacob", email = "alexander.jacob@jacob-consulting.de" }]
 license = { text = "MIT" }
@@ -68,7 +68,7 @@ testpaths = ["tests"]
 addopts = "-p no:cacheprovider"
 
 [tool.bumpversion]
-current_version = "0.3.0"
+current_version = "0.3.1"
 allow_dirty = false
 commit = true
 tag = true

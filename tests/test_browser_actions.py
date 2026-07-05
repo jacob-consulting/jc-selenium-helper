@@ -61,3 +61,9 @@ def test_hover_with_offset_lands_on_offset_target(browser, fixture_url):
     browser.open(fixture_url("offset.html"))
     browser.hover_with_offset("//div[@id='anchor']", 100, 0)
     assert browser.find("//div[@id='offset-result']").text == "offset-hovered"
+
+
+def test_double_click_with_pause(browser, fixture_url):
+    browser.open(fixture_url("basic.html"))
+    browser.double_click("//button[@id='dbl']", pause=0.1)
+    assert browser.find("//button[@id='dbl']").text == "double"

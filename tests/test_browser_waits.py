@@ -44,3 +44,12 @@ def test_wait_page_loaded_times_out_after_retries(browser, fixture_url):
     browser.open(fixture_url("basic.html"))
     with pytest.raises(TimeoutError, match="Page not loaded"):
         browser.wait_page_loaded("//div[@id='never-there']", retries=1, interval=0.1)
+
+
+def test_wait_document_ready_times_out(browser, fixture_url):
+    browser.open(fixture_url("basic.html"))
+    browser.driver.execute_script(
+        "Object.defineProperty(document, 'readyState', {get: () => 'loading'});"
+    )
+    with pytest.raises(TimeoutError, match="readyState"):
+        browser.wait_document_ready(timeout=0.3)

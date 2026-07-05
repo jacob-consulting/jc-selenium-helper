@@ -59,3 +59,34 @@ def test_legacy_get_elements_delegates_and_warns(driver, fixture_url):
     with pytest.warns(DeprecationWarning):
         els = legacy.get_elements("//li[@class='item']")
     assert len(els) == 3
+
+
+def test_legacy_wait_element_present_delegates_and_warns(driver, fixture_url):
+    legacy = LegacyBrowser(driver, default_timeout=10, poll_pause=0.2)
+    legacy.open(fixture_url("basic.html"))
+    with pytest.warns(DeprecationWarning):
+        el = legacy.wait_element_present("//span[@id='late']")
+    assert el.text == "here"
+
+
+def test_legacy_wait_element_not_present_delegates_and_warns(driver, fixture_url):
+    legacy = LegacyBrowser(driver, default_timeout=10, poll_pause=0.2)
+    legacy.open(fixture_url("dynamic.html"))
+    with pytest.warns(DeprecationWarning):
+        result = legacy.wait_element_not_present("//div[@id='vanishing']")
+    assert result is True
+
+
+def test_legacy_wait_element_clickable_delegates_and_warns(driver, fixture_url):
+    legacy = LegacyBrowser(driver, default_timeout=10, poll_pause=0.2)
+    legacy.open(fixture_url("basic.html"))
+    with pytest.warns(DeprecationWarning):
+        el = legacy.wait_element_clickable("//button[@id='btn']")
+    assert el.tag_name == "button"
+
+
+def test_legacy_inhalt_geladen_delegates_and_warns(driver, fixture_url):
+    legacy = LegacyBrowser(driver, default_timeout=10, poll_pause=0.2)
+    legacy.open(fixture_url("basic.html"))
+    with pytest.warns(DeprecationWarning):
+        legacy.inhalt_geladen()

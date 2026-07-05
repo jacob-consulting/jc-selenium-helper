@@ -2,12 +2,27 @@
 
 ## Unreleased
 
+### Removed
+
+- `legacy.switch_and_fill_frame` — it was unrunnable outside its original app
+  (it depended on a `combined.settings.k_pause` object absent from this package
+  and hardcoded a TinyMCE inner path). Use `fill_in_frame(frame_path,
+  inner_path, text)` instead.
+
+### Changed
+
+- `assert_present` and `assert_selected_option` now wait for the element (new
+  optional `timeout` parameter), consistent with the checkbox asserts, instead
+  of resolving immediately.
+
 ### Fixed
 
 - `hover_with_offset` now applies the offset in a single chained `ActionChains`
   action (`move_to_element(...).move_by_offset(...)`) instead of two separate
   `perform()` calls. The observable pointer destination is unchanged; the
   implementation is simpler and its intent clearer.
+- `rgb_to_hex` now raises a descriptive `ValueError` (naming the offending
+  input) on malformed strings instead of a bare `ValueError`/`IndexError`.
 
 ### Internal
 
@@ -15,6 +30,7 @@
   `hover_with_offset` (real headless-Chrome behavior via a new `offset.html`
   fixture) and the `jc_browser` plugin fixture (wiring verified under
   `pytester`). No API changes.
+- Pinned ruff to the 0.15.x line across the `dev` extra and pre-commit.
 
 ## 0.3.1
 

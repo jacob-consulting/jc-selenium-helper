@@ -112,3 +112,28 @@ def test_conftest_override_can_customize_jc_options(pytester):
     )
     result = pytester.runpytest()
     result.assert_outcomes(passed=1)
+
+
+def test_jc_browser_wraps_selenium(pytester):
+    pytester.makeconftest(
+        """
+        import pytest
+
+
+        @pytest.fixture
+        def selenium():
+            return object()  # stub driver — jc_browser must wrap exactly this
+        """
+    )
+    pytester.makepyfile(
+        """
+        from jc_selenium_helper.browser import Browser
+
+
+        def test_wrap(jc_browser, selenium):
+            assert isinstance(jc_browser, Browser)
+            assert jc_browser.driver is selenium
+        """
+    )
+    result = pytester.runpytest()
+    result.assert_outcomes(passed=1)

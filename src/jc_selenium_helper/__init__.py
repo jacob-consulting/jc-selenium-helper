@@ -2,6 +2,6 @@
 
 from jc_selenium_helper.browser import Browser
 
-__version__ = "0.3.1"
+__version__ = "0.4.0"
 
 __all__ = ["Browser", "__version__"]

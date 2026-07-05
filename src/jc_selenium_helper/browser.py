@@ -179,8 +179,8 @@ class Browser:
     ) -> None:
         """Switch into ``frame_path``, type ``text`` into ``inner_path``, switch back.
 
-        Generic replacement for the app-specific ``switch_and_fill_frame`` (which
-        hardcoded the TinyMCE inner path).
+        Takes the inner element path as a parameter (rather than hardcoding a
+        specific one).
         """
         frame = self.find(frame_path, by)
         self.driver.switch_to.frame(frame)

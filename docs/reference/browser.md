@@ -219,8 +219,8 @@ browser.assert_present("//div[@class='success']")
 
 Switches into the frame at `frame_path`, types `text` into `inner_path` inside
 it, optionally submits with <kbd>Return</kbd>, then switches back to the
-default content. Generic replacement for the app-specific
-`switch_and_fill_frame` (which hardcoded a TinyMCE-specific inner path).
+default content. Takes the inner element path as a parameter rather than
+hardcoding a specific one.
 
 ```python
 browser.fill_in_frame("//iframe[@id='editor']", "//*[@id='tinymce']/p", "Hello world")

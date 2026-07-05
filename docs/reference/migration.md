@@ -24,10 +24,12 @@ generic replacement deliberately drops:
 - `seite_geladen` hardcoded a fixed 1-second initial sleep and a
   `ValueError("Seite nicht geladen")` on giving up; `wait_page_loaded` raises
   `TimeoutError` instead and takes `retries`/`interval` as parameters.
-- `switch_and_fill_frame` hardcoded a TinyMCE-specific inner path
-  (`//*[@id='tinymce']/p`) and a project settings object
-  (`combined.settings.k_pause`); `fill_in_frame` takes the inner path as a
-  parameter and has no dependency on project settings.
+- `switch_and_fill_frame` was **removed** (it was unrunnable outside its
+  original app — it depended on a `combined.settings.k_pause` object that does
+  not exist in this package, and hardcoded the TinyMCE inner path
+  `//*[@id='tinymce']/p`). Use `fill_in_frame(frame_path, inner_path, text)`
+  instead, passing the inner path explicitly and adding your own `time.sleep`
+  beforehand if you need the old pause.
 
 ## Method mapping
 
@@ -56,7 +58,7 @@ generic replacement deliberately drops:
 | `check_select` | `assert_selected_option` |
 | `ele_test` | `assert_present` |
 | `switch_rgb` | `jc_selenium_helper.colors.rgb_to_hex` |
-| `switch_and_fill_frame` | `fill_in_frame` |
+| `switch_and_fill_frame` | **removed** — use `fill_in_frame` |
 
 See [Browser](browser.md) for the full signatures of the new methods and
 [Colors](colors.md) for `rgb_to_hex`.

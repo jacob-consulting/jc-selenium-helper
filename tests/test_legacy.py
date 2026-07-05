@@ -22,3 +22,8 @@ def test_legacy_check_exists_by_xpath(driver, fixture_url):
 def test_legacy_switch_rgb_static():
     with pytest.warns(DeprecationWarning):
         assert LegacyBrowser.switch_rgb("rgb(255, 0, 0)") == "#ff0000"
+
+
+def test_switch_and_fill_frame_removed():
+    # M1.1: the unrunnable legacy method was deleted; callers use fill_in_frame.
+    assert not hasattr(LegacyBrowser, "switch_and_fill_frame")

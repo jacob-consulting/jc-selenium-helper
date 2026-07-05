@@ -21,7 +21,6 @@ import time
 import warnings
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 
 from jc_selenium_helper.browser import Browser as _Browser
 from jc_selenium_helper.colors import rgb_to_hex
@@ -142,16 +141,6 @@ class LegacyBrowser(_Browser):
             if time_counter > 5:
                 raise ValueError("Seite nicht geladen")
         self.inhalt_geladen()
-
-    def switch_and_fill_frame(self, combined, path, text):
-        _deprecated("switch_and_fill_frame", "fill_in_frame")
-        time.sleep(combined.settings.k_pause)
-        switch_frame = self.driver.find_element(By.XPATH, path)
-        self.driver.switch_to.frame(switch_frame)
-        tmp_path = "//*[@id='tinymce']/p"
-        self.type_text(tmp_path, text)
-        self.type_text(tmp_path, Keys.RETURN)
-        self.driver.switch_to.default_content()
 
 
 # Drop-in module-level alias: ``from jc_selenium_helper.legacy import Browser``

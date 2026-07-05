@@ -31,6 +31,8 @@
   fixture) and the `jc_browser` plugin fixture (wiring verified under
   `pytester`). No API changes.
 - Pinned ruff to the 0.15.x line across the `dev` extra and pre-commit.
+- Coverage is now measured via `coverage run -m pytest` (fixing an import-timing
+  under-count from the pytest entry point) with an 80% floor enforced in CI.
 
 ## 0.3.1
 

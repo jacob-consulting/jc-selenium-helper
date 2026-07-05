@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- `hover_with_offset` now applies the offset in a single chained `ActionChains`
+  action (`move_to_element(...).move_by_offset(...)`) instead of two separate
+  `perform()` calls. The observable pointer destination is unchanged; the
+  implementation is simpler and its intent clearer.
+
+### Internal
+
+- Test backfill for the last two untested surfaces from the audit's M0.2:
+  `hover_with_offset` (real headless-Chrome behavior via a new `offset.html`
+  fixture) and the `jc_browser` plugin fixture (wiring verified under
+  `pytester`). No API changes.
+
 ## 0.3.1
 
 ### Internal

@@ -111,9 +111,7 @@ class Browser:
 
     def hover_with_offset(self, locator: str, x_offset: int, y_offset: int, by: str = By.XPATH) -> None:
         element = self.find(locator, by)
-        actions = ActionChains(self.driver)
-        actions.move_to_element(element).perform()
-        actions.move_by_offset(x_offset, y_offset).perform()
+        ActionChains(self.driver).move_to_element(element).move_by_offset(x_offset, y_offset).perform()
 
     def move_to(self, locator: str, by: str = By.XPATH) -> None:
         element = self.find(locator, by)

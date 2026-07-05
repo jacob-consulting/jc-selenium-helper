@@ -55,3 +55,9 @@ def test_upload_file_sets_input_value(browser, fixture_url):
     browser.upload_file("#upload", upload_path)
     value = browser.find("#upload", by=By.CSS_SELECTOR).get_attribute("value")
     assert value.endswith("basic.html")
+
+
+def test_hover_with_offset_lands_on_offset_target(browser, fixture_url):
+    browser.open(fixture_url("offset.html"))
+    browser.hover_with_offset("//div[@id='anchor']", 100, 0)
+    assert browser.find("//div[@id='offset-result']").text == "offset-hovered"

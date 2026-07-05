@@ -180,3 +180,10 @@ def test_legacy_ele_test_delegates_and_warns(driver, fixture_url):
     legacy.open(fixture_url("basic.html"))
     with pytest.warns(DeprecationWarning):
         legacy.ele_test("//h1[@id='title']")
+
+
+def test_legacy_seite_geladen_delegates_and_warns(driver, fixture_url):
+    legacy = LegacyBrowser(driver, default_timeout=10, poll_pause=0.2)
+    legacy.open(fixture_url("basic.html"))
+    with pytest.warns(DeprecationWarning):
+        legacy.seite_geladen("//h1[@id='title']")

@@ -29,7 +29,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - uses: browser-actions/setup-chrome@v2
       - run: pip install -e ".[test]"
-      - run: pytest -q --cov=jc_selenium_helper --cov-report=term-missing
+      - run: coverage run -m pytest -q
+      - run: coverage report
 
   docs:
     runs-on: ubuntu-latest

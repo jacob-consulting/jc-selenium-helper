@@ -12,5 +12,6 @@ site/
 .ruff_cache/
 .nox/
 .codegraph/
+.coverage
 # IDE
 .idea/

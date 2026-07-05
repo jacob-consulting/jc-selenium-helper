@@ -152,3 +152,31 @@ def test_legacy_eingabe_upload_css_delegates_and_warns(driver, fixture_url):
         legacy.eingabe_upload_css("#upload", upload_path)
     value = legacy.find("#upload", by=By.CSS_SELECTOR).get_attribute("value")
     assert value.endswith("basic.html")
+
+
+def test_legacy_assert_checkbox_is_checked_delegates_and_warns(driver, fixture_url):
+    legacy = LegacyBrowser(driver, default_timeout=10, poll_pause=0.2)
+    legacy.open(fixture_url("basic.html"))
+    with pytest.warns(DeprecationWarning):
+        legacy.assert_checkbox_is_checked("//input[@id='checked-box']")
+
+
+def test_legacy_assert_checkbox_is_not_checked_delegates_and_warns(driver, fixture_url):
+    legacy = LegacyBrowser(driver, default_timeout=10, poll_pause=0.2)
+    legacy.open(fixture_url("basic.html"))
+    with pytest.warns(DeprecationWarning):
+        legacy.assert_checkbox_is_not_checked("//input[@id='unchecked-box']")
+
+
+def test_legacy_check_select_delegates_and_warns(driver, fixture_url):
+    legacy = LegacyBrowser(driver, default_timeout=10, poll_pause=0.2)
+    legacy.open(fixture_url("basic.html"))
+    with pytest.warns(DeprecationWarning):
+        legacy.check_select("//select[@id='picker']", "two")
+
+
+def test_legacy_ele_test_delegates_and_warns(driver, fixture_url):
+    legacy = LegacyBrowser(driver, default_timeout=10, poll_pause=0.2)
+    legacy.open(fixture_url("basic.html"))
+    with pytest.warns(DeprecationWarning):
+        legacy.ele_test("//h1[@id='title']")

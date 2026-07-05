@@ -10,9 +10,9 @@ with::
     from jc_selenium_helper.legacy import Browser
 
 Every legacy method emits a ``DeprecationWarning`` and delegates to the clean
-:class:`jc_selenium_helper.browser.Browser` API. Two methods
-(``seite_geladen`` and ``switch_and_fill_frame``) keep their original
-app-specific behavior verbatim so existing tests are unaffected.
+:class:`jc_selenium_helper.browser.Browser` API. One method (``seite_geladen``)
+keeps its original app-specific behavior verbatim so existing tests are
+unaffected.
 """
 
 from __future__ import annotations
